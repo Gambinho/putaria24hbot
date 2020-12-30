@@ -2,6 +2,5 @@
     "name":"putaria24hbot",
     "description": "none",
     "version":"0.0.1",
-    "repository": "https://github.com/Gambinho/putaria24hbot",
-    "start":"node index"
+    "repository": "https://github.com/Gambinho/putaria24hbot"
 }

@@ -1,16 +1,8 @@
 {
-    "name":"Putaria24h",
-    "prefix": ">",
+    "name":"putaria24hbot",
     "version":"0.0.1",
-    "servers":[
-        "permanente",
-        "puteiro_automatico",
-        "mods"
-    ],
-    "users":[
-
-    ],
-    "factions":[
-        
-    ]
+    "prefix":"\u003e",
+    "users":[],
+    "servers":[],
+    "factions":[]
 }
