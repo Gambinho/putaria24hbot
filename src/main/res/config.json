@@ -1,0 +1,16 @@
+{
+    "name":"Putaria24h",
+    "prefix": ">",
+    "version":"0.0.1",
+    "servers":[
+        "permanente",
+        "puteiro_automatico",
+        "mods"
+    ],
+    "users":[
+
+    ],
+    "factions":[
+        
+    ]
+}

@@ -1,5 +1,6 @@
 package com.putaria.bot;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -16,13 +17,9 @@ public class Commands extends ListenerAdapter {
 
     public Commands() {
         try {
-            bfr = new BufferedReader(new FileReader(new File("C:\\Users\\Matheus\\Pictures\\BotServer\\src\\main\\res\\greetings.txt")));
-        } catch (IOException e){
-            try{
-                bfr = new BufferedReader(new FileReader(new File("greetings")));
-            } catch (IOException e2){
-                System.out.println(e + "\n" + e2);
-            }
+            bfr = new BufferedReader(new FileReader("src/main/res/greetings.txt"));
+        } catch (IOException e){ 
+            System.err.println(e); 
         }
     }
 
@@ -40,12 +37,17 @@ public class Commands extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
         if(!event.getAuthor().isBot()){
-            String[] msgSplited = event.getMessage().getContentRaw().split("\\s");
+            User author = event.getAuthor();
+            String name = event.getAuthor().getName();
+            Message msg = event.getMessage();
+            String content = msg.getContentRaw();
+            String[] msgSplited = content.split("\\s");
+            TextChannel channel = msg.getTextChannel();
+
             if(msgSplited[0].startsWith(Bot.prefix)){
-                if(msgSplited[0].contains("faction")){
-                    if(msgSplited[1].equalsIgnoreCase("create")){
-                        sendMessage(event.getChannel(), "https://forms.gle/ZBQMHzM456XvV7wP6");
-                    }
+                msgSplited[0] = msgSplited[0].substring(1);
+                if(msgSplited[0].equalsIgnoreCase("faction")){
+                    factionCommand(channel, msgSplited);
                 }
             }
             if(event.getMessage().getContentRaw().equalsIgnoreCase("greetings test")){
@@ -59,7 +61,13 @@ public class Commands extends ListenerAdapter {
         }
     }
 
-    public static void sendMessage(TextChannel channelToSend, String messageToSend){
+    public void factionCommand(TextChannel channel,String[] command){
+        if(command[1].equalsIgnoreCase("create")){
+            sendMessage(channel, "https://forms.gle/ZBQMHzM456XvV7wP6");
+        }
+    }
+
+    public void sendMessage(TextChannel channelToSend, String messageToSend){
         channelToSend.sendMessage(messageToSend).queue();
     }
 }
