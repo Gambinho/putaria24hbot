@@ -1,6 +1,7 @@
 package com.putaria.bot;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.util.List;
 
 public class Commands extends ListenerAdapter {
 
@@ -37,15 +39,17 @@ public class Commands extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
         if(!event.getAuthor().isBot()){
-            User author = event.getAuthor();
-            String name = event.getAuthor().getName();
             Message msg = event.getMessage();
             String content = msg.getContentRaw();
             String[] msgSplited = content.split("\\s");
-            TextChannel channel = msg.getTextChannel();
 
-            if(msgSplited[0].startsWith(Bot.prefix)){
+            if(msgSplited[0].startsWith(Bot.config.prefix)){
+                User author = event.getAuthor();
+                List<Role> authorRoles = event.getMember().getRoles();
+                String name = author.getName();
                 msgSplited[0] = msgSplited[0].substring(1);
+                TextChannel channel = msg.getTextChannel();
+
                 if(msgSplited[0].equalsIgnoreCase("faction")){
                     factionCommand(channel, msgSplited);
                 }
