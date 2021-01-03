@@ -30,6 +30,7 @@ public class Commands extends ListenerAdapter {
     public Commands() {
         try {
             bfr = new BufferedReader(new FileReader("src/main/res/greetings.txt"));
+            fw = new FileWriter("src/main/res/config.json");
         } catch (IOException e) {
             Bot.logger.log(Logger.Level.ERROR, e);
         }
@@ -59,12 +60,14 @@ public class Commands extends ListenerAdapter {
                 Bot.config.users.add(user);
                 String gsonWrite = new Gson().toJson(Bot.config).toString();
                 try {
-                    fw = new FileWriter("src/main/res/config.json");
                     fw.write(gsonWrite);
                     fw.flush();
                 } catch (IOException e) {
                     //ignored
                 }
+                sendMessage(event.getChannel(), "Registro feito");
+                RegistryCommand.registeringUser.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(RegistryCommand.ID));
+                event.getGuild().modifyMemberRoles(event.getMember(), RegistryCommand.rolesHolder).queue();
                 RegistryCommand.fila.remove(0);
                 RegistryCommand.inExecution = false;
                 RegistryCommand.registeringUser = null;

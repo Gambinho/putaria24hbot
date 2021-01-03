@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.putaria.bot.Bot;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -13,19 +14,21 @@ import net.dv8tion.jda.api.entities.User;
 
 public class RegistryCommand extends Command {
 
-    public static List<User> fila = new ArrayList<>();
+    public static final List<Member> fila = new ArrayList<>();
     public static boolean inExecution = false;
-    public static User registeringUser = null;
-    public static List<Role> roles;
+    public static Member registeringUser = null;
+    public static List<Role> rolesHolder;
+    public static final long ID = 795039831368663060L;
 
     public RegistryCommand(User caller, TextChannel tc) {
         super(caller, tc);
     }
 
     public static void staticExecute(Member user, TextChannel channelToExecute) {
+        Guild guild = user.getGuild();
         RegistryCommand.inExecution = true;
-        roles = user.getRoles();
-        user.getGuild().getManager().removeRoleFromUser();
+        rolesHolder = user.getRoles();
+        guild.modifyMemberRoles(user, guild.getRoleById(ID)).queue();
         staticSendMessage("<@" + user.getId() + "> Qual nick vc usa no Minecraft?", channelToExecute);
         RegistryCommand.registeringUser = user;
 
@@ -35,7 +38,7 @@ public class RegistryCommand extends Command {
 
     @Override
     public void start(Message msg) {
-        var localCaller = msg.getAuthor();
+        var localCaller = msg.getMember();
         if(userAlreadyRegistered(localCaller)){
             sendMessage("Vc ja foi registrado");
             return;
@@ -44,19 +47,23 @@ public class RegistryCommand extends Command {
         if(fila.get(0) != localCaller){
             sendMessage("Alguns usuarios estao na sua frente, mas ja te coloquei na fila. Voce sera marcado quando sua vez chegar");
         }
-        if(!inExecution) staticExecute(msg.getAuthor(), msg.getGuild().getTextChannelById(795039831507730453L));
+        if(!inExecution) staticExecute(msg.getMember(), msg.getGuild().getTextChannelById(795039831507730453L));
     }
 
+    /**
+     * Ignored, execution moved to {@code staticExecute()}
+     */
     @Override
     public void execute(Message msg) {
-        //Ignored, execution moved to @code staticExecute()
+        //Ignored
     }
     
     public static void staticSendMessage(String msg, TextChannel tc){
+
         tc.sendMessage(msg).queue();
     }
 
-    public boolean userAlreadyRegistered(User user){
+    public boolean userAlreadyRegistered(Member user){
         for(int i = 0; i < Bot.config.users.size(); i++){
             if(user.getIdLong() == Bot.config.users.get(i).ID) return true;
         }
