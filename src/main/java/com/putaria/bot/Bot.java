@@ -20,11 +20,12 @@ public class Bot {
     public static JDA jda;
     public static Config config;
     public static Logger logger;
+    public static Gson gsonHandler = new Gson();
 
     public static void main(String[] args) throws LoginException {
 
         try {
-            config = new Gson().fromJson(new FileReader("src/main/res/config.json"), Config.class);
+            config = gsonHandler.fromJson(new FileReader("src/main/res/config.json"), Config.class);
         } catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
             e.printStackTrace();
         }

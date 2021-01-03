@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.putaria.bot.commands.RegistryCommand;
 
 import java.awt.Color;
@@ -30,7 +32,7 @@ public class Commands extends ListenerAdapter {
     public Commands() {
         try {
             bfr = new BufferedReader(new FileReader("src/main/res/greetings.txt"));
-            fw = new FileWriter("src/main/res/config.json");
+            fw = new FileWriter("src/main/res/config.json", false);
         } catch (IOException e) {
             Bot.logger.log(Logger.Level.ERROR, e);
         }
@@ -58,19 +60,24 @@ public class Commands extends ListenerAdapter {
                 PutariaUser user = new PutariaUser(msg.getAuthor().getName(), msg.getAuthor().getIdLong(),
                         event.getMessage().getContentRaw());
                 Bot.config.users.add(user);
-                String gsonWrite = new Gson().toJson(Bot.config).toString();
+                
+                String gsonWrite = new Gson().toJson(Bot.config);
                 try {
+                    fw.write("");
                     fw.write(gsonWrite);
                     fw.flush();
                 } catch (IOException e) {
-                    //ignored
+                    // ignored
                 }
+
                 sendMessage(event.getChannel(), "Registro feito");
-                RegistryCommand.registeringUser.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(RegistryCommand.ID));
+                RegistryCommand.registeringUser.getGuild().removeRoleFromMember(event.getMember(),
+                        event.getGuild().getRoleById(RegistryCommand.ID));
                 event.getGuild().modifyMemberRoles(event.getMember(), RegistryCommand.rolesHolder).queue();
                 RegistryCommand.fila.remove(0);
                 RegistryCommand.inExecution = false;
                 RegistryCommand.registeringUser = null;
+                
                 if (!RegistryCommand.fila.isEmpty())
                     RegistryCommand.staticExecute(RegistryCommand.fila.get(0),
                             event.getGuild().getTextChannelById(795039831507730453L));

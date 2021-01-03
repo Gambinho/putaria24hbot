@@ -31,7 +31,7 @@ public class RegistryCommand extends Command {
         guild.modifyMemberRoles(user, guild.getRoleById(ID)).queue();
         staticSendMessage("<@" + user.getId() + "> Qual nick vc usa no Minecraft?", channelToExecute);
         RegistryCommand.registeringUser = user;
-
+        
         //TODO
 
     }
