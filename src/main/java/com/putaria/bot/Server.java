@@ -2,8 +2,8 @@ package com.putaria.bot;
 
 import java.util.List;
 
-public class Faction {
+public class Server {
     public String name;
-    public PutariaUser leader;
     public List<PutariaUser> members;
+    public PutariaUser leader;
 }

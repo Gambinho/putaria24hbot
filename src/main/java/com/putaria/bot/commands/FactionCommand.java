@@ -14,5 +14,11 @@ public class FactionCommand extends Command {
     public void execute(Message msg) {
         //Ainda será preenchido
     }
+
+    @Override
+    public void start(Message msg) {
+        // TODO Auto-generated method stub
+
+    }
     
 }

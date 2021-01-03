@@ -30,4 +30,10 @@ public abstract class Command {
         return channel;
     }
 
+    protected void sendMessage(String msg){
+        channel.sendMessage(msg).queue();
+    }
+
+    public abstract void start(Message msg);
+
 }
