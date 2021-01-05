@@ -63,9 +63,10 @@ public class Commands extends ListenerAdapter {
                 
                 String gsonWrite = new Gson().toJson(Bot.config);
                 try {
+                    fw = new FileWriter("src/main/res/config.json", false);
                     fw.write("");
                     fw.write(gsonWrite);
-                    fw.flush();
+                    fw.close();
                 } catch (IOException e) {
                     // ignored
                 }
