@@ -21,7 +21,7 @@ public class Bot {
     public static Config config;
     public static Logger logger;
     public static Gson gsonHandler = new Gson();
-
+    
     public static void main(String[] args) throws LoginException {
 
         try {

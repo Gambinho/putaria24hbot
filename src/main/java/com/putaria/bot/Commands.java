@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.putaria.bot.commands.PrisonCommand;
 import com.putaria.bot.commands.RegistryCommand;
 
 import java.awt.Color;
@@ -61,7 +62,7 @@ public class Commands extends ListenerAdapter {
                         event.getMessage().getContentRaw());
                 Bot.config.users.add(user);
                 
-                String gsonWrite = new Gson().toJson(Bot.config);
+               String gsonWrite = new Gson().toJson(Bot.config);
                 try {
                     fw = new FileWriter("src/main/res/config.json", false);
                     fw.write("");
@@ -105,6 +106,8 @@ public class Commands extends ListenerAdapter {
                     } else if(msgSplited[0].equalsIgnoreCase("clear")){
                         List<Message> messages = channel.getHistory().retrievePast(Integer.parseInt(msgSplited[1]) + 1).complete();
                         channel.deleteMessages(messages).complete();
+                    } else if(msgSplited[0].equalsIgnoreCase("prender") && msg.getMember().getRoles().contains(msg.getGuild().getRoleById(720085917099884605L))){
+                        new PrisonCommand(author, channel, msg.getGuild().getMemberById(msgSplited[1].substring(2, 20)));
                     }
                 } else if(msg.getMember().getRoles().contains(msg.getGuild().getRoleById(720085917099884605L))){
                     //TODO comandos de admins
